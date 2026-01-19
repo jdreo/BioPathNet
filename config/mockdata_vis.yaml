@@ -1,10 +1,10 @@
-output_dir: /Users/claudy/work/projects/BioPathNet/experiments/vis/
+output_dir: /Users/claudy/work/projects/BioPathNet/2025-BPN-simplest/experiments/
 
 dataset:
   class: biomedical
-  path: /Users/claudy/work/projects/BioPathNet/data/mock
+  path: /Users/claudy/work/projects/BioPathNet/data/simplest/
   include_factgraph: yes
-  files: ['train1.txt', 'train2.txt', 'valid.txt', 'test_pred.txt']
+  files: ['brg.txt', 'graph_learning.txt', 'graph_validation.txt', 'graph_test_gt.txt']
 
 task:
   class: KnowledgeGraphCompletionBiomed

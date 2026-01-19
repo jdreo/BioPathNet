@@ -95,6 +95,8 @@ if __name__ == "__main__":
         logger.warning(pprint.pformat(cfg))
 
     dataset = core.Configurable.load_config_dict(cfg.dataset)
+    print("In run.py/main, dataset = ")
+    print(dataset)
     solver = util.build_solver(cfg, dataset)
 
     train_and_validate(cfg, solver)
