@@ -162,6 +162,8 @@ if __name__ == "__main__":
     if 'files' not in cfg.dataset:
         cfg.dataset['files'] = ['train1.txt', 'train2.txt', 'valid.txt', 'test_pred.txt']
     _dataset = core.Configurable.load_config_dict(cfg.dataset)
+    print("cfg.dataset: ", cfg.dataset)
+    print("**** _dataset:", _dataset)
     train_set, valid_set, test_set = _dataset.split()
     full_valid_set = valid_set
     if comm.get_rank() == 0:
