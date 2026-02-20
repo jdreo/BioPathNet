@@ -1,10 +1,10 @@
-output_dir: /Users/claudy/work/projects/BioPathNet/experiments/vis/
+output_dir: experiments/
 
 dataset:
   class: biomedical
-  path: /Users/claudy/work/projects/BioPathNet/data/mock
+  path: data/mock
   include_factgraph: yes
-  files: ['train1.txt', 'train2.txt', 'valid.txt', 'test_pred.txt']
+  files: ['train1.txt', 'train2.txt', 'valid.txt', 'test_vis.txt']
 
 task:
   class: KnowledgeGraphCompletionBiomed
