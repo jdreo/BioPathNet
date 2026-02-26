@@ -1,0 +1,83 @@
+Bootstrap: docker
+From: python:3.10-slim
+
+%setup
+    mkdir -p $APPTAINER_ROOTFS/BioPathNet
+    cp -r ./pyproject.toml $APPTAINER_ROOTFS/
+    mkdir -p $APPTAINER_ROOTFS/BioPathNet/script
+    mkdir -p $APPTAINER_ROOTFS/BioPathNet/biopathnet
+    mkdir -p $APPTAINER_ROOTFS/BioPathNet/bin
+    mkdir -p $APPTAINER_ROOTFS/BioPathNet/config
+    mkdir -p $APPTAINER_ROOTFS/BioPathNet/data
+
+%files
+
+%post
+    # Update the available packages list.
+    apt -y update
+    # And add the "universe" repository (allow to install many more software).
+    # apt -y install software-properties-common time
+    # add-apt-repository universe
+    # apt -y update
+    # Update the operating systems (install last versions with bugfixes).
+    # apt -y dist-upgrade
+
+    # Install dependencies for your project.
+    apt -y install curl bash git
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    cd /BioPathNet/
+    echo "export PATH=/root/.local/bin:\$PATH" >> $APPTAINER_ENVIRONMENT
+    export UV_PROJECT_ENVIRONMENT=$(pwd)/.venv 
+
+#    /root/.local/bin/uv python pin 3.8
+#    /root/.local/bin/uv init
+    /root/.local/bin/uv add easydict
+    /root/.local/bin/uv add ogb
+    /root/.local/bin/uv add pyyaml
+    /root/.local/bin/uv add torch
+#    /root/.local/bin/uv add torch-scatter
+    /root/.local/bin/uv add "torchdrug @ git+https://github.com/DeepGraphLearning/torchdrug"
+    /root/.local/bin/uv add "numpy<2" 
+
+    /root/.local/bin/uv sync --no-cache
+
+    
+    # Clean-up of the APT cache (will lighten the container).
+    # apt -y purge software-properties-common curl
+    # apt -y --purge autoremove
+    # apt -y autoclean
+    # apt clean
+
+%environment
+    export APPTAINER_SHELL=/bin/bash
+    export PATH="$PATH:/root/.local/bin"
+    export UV_CACHE_DIR=/tmp/uv_cache
+
+%runscript
+    SCRIPT=$1
+    CONFIG=$2
+    GPUS=$3
+
+    if [[$1 == "script/run.py"]]; then
+        if [[$# -eq 5]]; then 
+            uv run $SCRIPT -c $CONFIG --gpus $GPUS
+        else
+            if [[$# -eq 4]]; then 
+                SEED=$4
+                uv run $SCRIPT -s $SEED -c $CONFIG --gpus $GPUS
+            fi
+        fi
+    fi
+    
+
+
+    
+%test
+    ls /BioPathNet
+    ls /BioPathNet/pyproject.toml
+    uv run /BioPathNet/script/run.py --help
+
+%labels
+    Author Claire Laudy
+    Author Johann Dreo
