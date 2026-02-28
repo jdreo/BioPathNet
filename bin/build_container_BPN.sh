@@ -1,4 +1,6 @@
 #!/usr/bin/bash
+# To be launched from the root of the BioPathNet directory.
+
 
 set -e
 set -o pipefail
@@ -15,6 +17,6 @@ if command -v module ; then
     module load apptainer
 fi
 apptainer cache clean -f
-apptainer build -F biopathnet.sif biopathnet.def
+apptainer build -F --bind $(pwd):/BioPathNet biopathnet.sif biopathnet.def
 
 

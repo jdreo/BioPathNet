@@ -47,22 +47,7 @@ From: python:3.10-slim
 
 
 %runscript
-    #!/bin/bash
-
-    SCRIPT=$1
-    CONFIG=$2
-    GPUS=$3
-
-    if [[ $1 == "script/run.py" ]] ; then
-        if [[ $# -eq 5 ]] ; then
-           $SCRIPT -c $CONFIG --gpus $GPUS
-        else
-            if [[ $# -eq 4 ]] ; then
-                SEED=$4
-               $SCRIPT -s $SEED -c $CONFIG --gpus $GPUS
-            fi
-        fi
-    fi
+    /BioPathNet/bin/run_BPN.sh $*
 
 
 %test
