@@ -32,14 +32,14 @@ if [[ $1 == "script/run.py" ]] ; then
 	echo "Launch run.py script"
 	if [[ $# -eq 3 ]] ; then
 		echo "No fixed seed"
-		../${SCRIPT} -c ../${CONFIG} --gpus ${GPUS}
+		/venv/bin/python ../${SCRIPT} -c ../${CONFIG} --gpus ${GPUS}
 	else
 		if [[ $# -eq 4 ]] ; then
 			echo "Fixed seed=${SEED}"
 			SEED=$4
-			$SCRIPT -s $SEED -c $CONFIG --gpus $GPUS
+			/venv/bin/python ../$SCRIPT -s $SEED -c $CONFIG --gpus $GPUS
 		fi
 	fi
 fi
 
-#apptainer run -B /pasteur/appa/homes/claudy --bind $(pwd):/BioPathNet biopathnet.sif script/run.py config/mock/mockdata_run.yaml [0]
+#run -p gpu -q gpu --gres=gpu:1 apptainer run -B /pasteur/appa/homes/claudy --bind $(pwd):/BioPathNet biopathnet.sif script/run.py config/mock/mockdata_run.yaml [0]
