@@ -16,7 +16,6 @@ fi
 if command -v module ; then
     module load apptainer
 fi
-apptainer cache clean -f
-apptainer build -F --bind $(pwd):/BioPathNet biopathnet.sif biopathnet.def
-
+# apptainer cache clean -f
+apptainer -v build --writable-tmpfs --bind $(pwd):/BioPathNet -F biopathnet.sif biopathnet.def
 
