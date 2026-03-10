@@ -3,16 +3,19 @@ module load apptainer cuda
 
 cat config/mock/mockdata_run.yaml | sed "s,/Users/claudy/work/projects/BioPathNet,$(pwd),g" > config/mock/mockdata_run_apptainer.yaml
 
-srun \
+cmd="srun \
     -p gpu \
     -q gpu \
-    --gres=gmem:1G,gpu:1 \
-    --mem=1G \
+    --gres=gmem:50G,gpu:1 \
+    --mem=50G \
     apptainer \
         run \
             --nv \
             --writable-tmpfs \
             --cleanenv \
             --bind $HOME --bind $(pwd):/BioPathNet \
-            biopathnet.sif script/run.py config/mock/mockdata_run_apptainer.yaml [0]
+            biopathnet.sif run config/mock/mockdata_run_apptainer.yaml [0] $@"
 
+echo "Submitting:" >&2
+echo $cmd >&2
+$cmd
