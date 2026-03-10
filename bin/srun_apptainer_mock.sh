@@ -1,7 +1,7 @@
 #!/bin/sh
 module load apptainer cuda
 
-cat config/mock/mockdata_run.yaml | sed "s,/Users/claudy/work/projects,$(pwd)/..,g" > config/mock/mockdata_run_apptainer.yaml
+cat config/mock/mockdata_run.yaml | sed "s,/Users/claudy/work/projects/BioPathNet,$(pwd),g" > config/mock/mockdata_run_apptainer.yaml
 
 srun \
     -p gpu \
