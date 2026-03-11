@@ -63,7 +63,8 @@ From: ubuntu:22.04  # Torch needs libc6-dev >= 2.29
 %runscript
     $BPNPY -c "import torch; print('Is CUDA available?:', torch.cuda.is_available()); print('CUDA device:', torch.cuda.get_device_name(0))"
     cd /BioPathNet
-    bin/run_apptainer.sh $*
+    # bin/run_apptainer.sh $*
+    $BPNPY /BioPathNet/script/bpn_api.py $*
 
 
 %test
