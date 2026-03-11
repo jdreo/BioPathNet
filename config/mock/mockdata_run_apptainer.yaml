@@ -1,8 +1,8 @@
-output_dir: /pasteur/appa/homes/claudy/BioPathNet/experiments/
+output_dir: {{BIOPATHNET}}/experiments/
 
 dataset:
   class: biomedical
-  path: /pasteur/appa/homes/claudy/BioPathNet/data/mock
+  path: {{BIOPATHNET}}/data/mock
   include_factgraph: yes
   files: ['train1.txt', 'train2.txt', 'valid.txt', 'test.txt']
 
