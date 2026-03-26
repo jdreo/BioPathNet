@@ -1,6 +1,7 @@
 import os
 import sys
 import pprint
+import logging
 
 import torch
 
@@ -11,7 +12,8 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from biopathnet import dataset, layer, model, task, util
 
 
-
+logger = util.get_root_logger()
+logger.setLevel(logging.DEBUG)
 
 def solver_load(checkpoint, load_optimizer=True):
 
@@ -71,6 +73,8 @@ def load_vocab(dataset):
 def visualize_path(solver, triplet, entity_vocab, relation_vocab):
     num_relation = len(relation_vocab)
     h, t, r = triplet.tolist()
+    logger.debug(f"triplet = {triplet}")
+    logger.debug(f"head = {entity_vocab[h]}, relation = {relation_vocab[r]}, tail ={entity_vocab[t]}")
     triplet = torch.as_tensor([[h, t, r]], device=solver.device)
     inverse = torch.as_tensor([[t, h, r + num_relation]], device=solver.device)
     solver.model.eval()
@@ -86,10 +90,11 @@ def visualize_path(solver, triplet, entity_vocab, relation_vocab):
         h_name = entity_vocab[h]
         t_name = entity_vocab[t]
         r_name = relation_vocab[r % num_relation]
+        logger.debug(f"h_name = {h_name}, r_name = {r_name}, t_name ={t_name}")
         if r >= num_relation:
             r_name += "^(-1)"
         logger.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        logger.warning("rank(%s | %s, %s) = %g" % (t_name, h_name, r_name, ranking))
+        logger.warning("rank(%s | %s, %s) = %g" % (h_name, r_name, t_name, ranking))
 
         paths, weights = solver.model.visualize(sample)
         for path, weight in zip(paths, weights):
@@ -108,12 +113,10 @@ if __name__ == "__main__":
     args, vars = util.parse_args()
     cfg = util.load_config(args.config, context=vars)
     working_dir = util.create_working_directory(cfg)
-    print(working_dir)
     vocab_file = os.path.join(os.path.dirname(__file__), cfg.dataset.path, "entity_names.txt")
     vocab_file = os.path.abspath(vocab_file)
     torch.manual_seed(args.seed + comm.get_rank())
 
-    logger = util.get_root_logger()
     logger.warning("Working directory: %s" % working_dir)
     logger.warning("Config file: %s" % args.config)
     logger.warning(pprint.pformat(cfg))
