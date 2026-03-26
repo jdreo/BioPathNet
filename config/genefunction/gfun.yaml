@@ -1,8 +1,8 @@
-output_dir: BioPathNet/experiments/
+output_dir: /pasteur/appa/homes/claudy/2026-BPN-paper-data/gene-function-prediction/
 
 dataset:
   class: biomedical
-  path: BioPathNet/data/PC_KEGG_0602
+  path: /pasteur/appa/homes/claudy/BioPathNet/data/PC_KEGG_0602
   include_factgraph: yes
   
 task:
@@ -16,7 +16,7 @@ task:
     short_cut: yes
     layer_norm: yes
     remove_one_hop: yes
-    dependent: yes
+    dependent: no
   criterion: bce
   num_negative: 32
   strict_negative: yes
