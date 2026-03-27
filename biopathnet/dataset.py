@@ -387,7 +387,6 @@ class biomedical(data.KnowledgeGraphDataset):
             txt_files.append(os.path.join(self.path, x))
 
         self.load_tsvs(txt_files, verbose=verbose)
-        print("Dans init, load_entity_types ", path)
         self.load_entity_types(path)
 
     def load_tsvs(self, tsv_files, verbose=0):
@@ -409,11 +408,11 @@ class biomedical(data.KnowledgeGraphDataset):
                 if verbose:
                     reader = tqdm(reader, "Loading %s" % tsv_file, utils.get_line_count(tsv_file))
 
-                print("Tokens to be added in inv_entity_x (",len(reader), ") : ",   reader)
+                # print("Tokens to be added in inv_entity_x (",len(reader), ") : ",   reader)
                 num_sample = 0
                 for tokens in reader:
-                    if len(tokens)!=3:
-                        print("Pb in token ", tokens)
+                    # if len(tokens)!=3:
+                    #     print("Pb in token ", tokens)
                     h_token, r_token, t_token = tokens
                     if h_token not in inv_entity_vocab:
                         inv_entity_vocab[h_token] = len(inv_entity_vocab)
@@ -450,8 +449,8 @@ class biomedical(data.KnowledgeGraphDataset):
         relation_vocab, inv_relation_vocab = self._standarize_vocab(relation_vocab, inv_relation_vocab)
 
         num_node = len(entity_vocab) if entity_vocab else None
-        print("**** entity_vocab: ", entity_vocab)
-        print("Load_triplet - num node = ", num_node)
+        # print("**** entity_vocab: ", entity_vocab)
+        # print("Load_triplet - num node = ", num_node)
         num_relation = len(relation_vocab) if relation_vocab else None
         self.graph = data.Graph(triplets, num_node=num_node, num_relation=num_relation)
         self.entity_vocab = entity_vocab
@@ -463,11 +462,11 @@ class biomedical(data.KnowledgeGraphDataset):
         inv_type_vocab = {}
         node_type = {}
         # read in node types
-        print("entity_files: ", self.entity_files)
-        print("**************")
-        print("node_type = ", node_type)
-        print(self.inv_entity_vocab)
-        print(len(self.inv_entity_vocab))
+        # print("entity_files: ", self.entity_files)
+        # print("**************")
+        # print("node_type = ", node_type)
+        # print(self.inv_entity_vocab)
+        # print(len(self.inv_entity_vocab))
         with open(os.path.join(path, self.entity_files[0]), "r") as f:
             lines = f.readlines()
             for line in lines:
@@ -476,13 +475,13 @@ class biomedical(data.KnowledgeGraphDataset):
                     inv_type_vocab[type_token] = len(inv_type_vocab)
                 if entity_token in self.inv_entity_vocab:
                     node_type[self.inv_entity_vocab[entity_token]] = inv_type_vocab[type_token]
-                else:
-                    print("Token not in inv_entity_vocab: ", entity_token)
+                # else:
+                #     print("Token not in inv_entity_vocab: ", entity_token)
 
-        print("**************")
-        print("node_type = ", node_type)
-        print("len(node_type) = ", len(node_type))
-        print("num_entity = ", self.num_entity)
+        # print("**************")
+        # print("node_type = ", node_type)
+        # print("len(node_type) = ", len(node_type))
+        # print("num_entity = ", self.num_entity)
         assert len(node_type) == self.num_entity
         _, node_type = zip(*sorted(node_type.items()))
         with self.graph.node():
@@ -668,7 +667,7 @@ class BiomedicalInductive(data.KnowledgeGraphDataset):
         node_type_train = {}
         node_type_test = {}
         # read in node types
-        print("--- entity_files = ", self.entity_files)
+        # print("--- entity_files = ", self.entity_files)
         with open(os.path.join(path, self.entity_files[0]), "r") as f:
             lines = f.readlines()
             for line in lines:
