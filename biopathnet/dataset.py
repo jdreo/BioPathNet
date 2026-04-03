@@ -408,11 +408,9 @@ class biomedical(data.KnowledgeGraphDataset):
                 if verbose:
                     reader = tqdm(reader, "Loading %s" % tsv_file, utils.get_line_count(tsv_file))
 
-                # print("Tokens to be added in inv_entity_x (",len(reader), ") : ",   reader)
                 num_sample = 0
                 for tokens in reader:
-                    # if len(tokens)!=3:
-                    #     print("Pb in token ", tokens)
+                    assert(len(tokens)==3)
                     h_token, r_token, t_token = tokens
                     if h_token not in inv_entity_vocab:
                         inv_entity_vocab[h_token] = len(inv_entity_vocab)
@@ -425,7 +423,6 @@ class biomedical(data.KnowledgeGraphDataset):
                     t = inv_entity_vocab[t_token]
                     triplets.append((h, t, r))
                     num_sample += 1
-#                print(inv_entity_vocab)
             num_samples.append(num_sample)
 
         self.load_triplet(triplets, inv_entity_vocab=inv_entity_vocab, inv_relation_vocab=inv_relation_vocab)
@@ -449,8 +446,6 @@ class biomedical(data.KnowledgeGraphDataset):
         relation_vocab, inv_relation_vocab = self._standarize_vocab(relation_vocab, inv_relation_vocab)
 
         num_node = len(entity_vocab) if entity_vocab else None
-        # print("**** entity_vocab: ", entity_vocab)
-        # print("Load_triplet - num node = ", num_node)
         num_relation = len(relation_vocab) if relation_vocab else None
         self.graph = data.Graph(triplets, num_node=num_node, num_relation=num_relation)
         self.entity_vocab = entity_vocab
@@ -461,16 +456,10 @@ class biomedical(data.KnowledgeGraphDataset):
     def load_entity_types(self, path) -> None:
         inv_type_vocab = {}
         node_type = {}
-        # read in node types
-        # print("entity_files: ", self.entity_files)
-        # print("**************")
-        # print("node_type = ", node_type)
-        # print(self.inv_entity_vocab)
-        # print(len(self.inv_entity_vocab))
         with open(os.path.join(path, self.entity_files[0]), "r") as f:
             lines = f.readlines()
             for line in lines:
-                entity_token, type_token = line.strip().split()
+                entity_token, type_token = line.strip().split("\t")
                 if type_token not in inv_type_vocab:
                     inv_type_vocab[type_token] = len(inv_type_vocab)
                 if entity_token in self.inv_entity_vocab:
@@ -478,10 +467,6 @@ class biomedical(data.KnowledgeGraphDataset):
                 # else:
                 #     print("Token not in inv_entity_vocab: ", entity_token)
 
-        # print("**************")
-        # print("node_type = ", node_type)
-        # print("len(node_type) = ", len(node_type))
-        # print("num_entity = ", self.num_entity)
         assert len(node_type) == self.num_entity
         _, node_type = zip(*sorted(node_type.items()))
         with self.graph.node():
@@ -666,12 +651,10 @@ class BiomedicalInductive(data.KnowledgeGraphDataset):
         inv_test_type_vocab = {}
         node_type_train = {}
         node_type_test = {}
-        # read in node types
-        # print("--- entity_files = ", self.entity_files)
         with open(os.path.join(path, self.entity_files[0]), "r") as f:
             lines = f.readlines()
             for line in lines:
-                entity_token, type_token = line.strip().split()
+                entity_token, type_token = line.strip().split("\t")
                 if type_token not in inv_train_type_vocab:
                     inv_train_type_vocab[type_token] = len(inv_train_type_vocab)
                 if type_token not in inv_test_type_vocab:
