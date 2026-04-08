@@ -41,6 +41,7 @@ elif (function=="predict" or
     function=="eval_and_predict" or
     function=="eval_and_predict_inductive" or
     function=="visualize" or
+    function=="visualize_graph" or
     function=="visualize_inductive"):
     if not args.checkpoint:
         logger.error(f"ERROR: Missing --checkpoint option for the {function} function")
