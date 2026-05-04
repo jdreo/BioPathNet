@@ -1,11 +1,11 @@
-output_dir: /pasteur/appa/homes/claudy/2026-BPN-paper-data/gene-function-prediction/
+output_dir: /BioPathNet/experiments/single_SKG/simplest/1000/10/2/childOf/0/
 
 dataset:
   class: biomedical
-  path: /pasteur/appa/homes/claudy/BioPathNet/data/PC_KEGG_0602
-  include_factgraph: yes
-  
-task:
+  path: /BioPathNet/data/single_SKG/simplest/1000/10/2/childOf/0/
+  files: ['brg.txt', 'graph_learning.txt', 'graph_validation.txt', 'graph_test_inverse.txt']
+
+task: 
   class: KnowledgeGraphCompletionBiomed
   model:
     class: NBFNet
@@ -15,17 +15,16 @@ task:
     aggregate_func: pna
     short_cut: yes
     layer_norm: yes
-    remove_one_hop: yes
-    dependent: no
+    dependent: yes
+    symmetric: no
   criterion: bce
   num_negative: 32
   strict_negative: yes
-  adversarial_temperature: 1
+  adversarial_temperature: 0.5
   sample_weight: no
   heterogeneous_negative: yes
   heterogeneous_evaluation: yes
-  full_batch_eval: yes
-
+  full_batch_eval: no
 
 optimizer:
   class: Adam
@@ -33,11 +32,10 @@ optimizer:
 
 engine:
   gpus: {{ gpus }}
-  batch_size: 32
+  batch_size: 16
   
-
 train:
-  num_epoch: 15
-  #batch_per_epoch: 500
+  num_epoch: 5
   
 metric: mrr
+checkpoint: {{checkpoint}}

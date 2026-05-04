@@ -89,7 +89,7 @@ def visualize_path(solver, triplet, entity_vocab, relation_vocab):
         if r >= num_relation:
             r_name += "^(-1)"
         logger.warning(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        logger.warning("rank(%s | %s, %s) = %g" % (t_name, h_name, r_name, ranking))
+        logger.warning("rank(%s | %s, %s) = %g" % (h_name, r_name, t_name, ranking))
 
         paths, weights = solver.model.visualize(sample)
         for path, weight in zip(paths, weights):

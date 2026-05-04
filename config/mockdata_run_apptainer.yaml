@@ -1,10 +1,11 @@
-output_dir: /pasteur/appa/homes/claudy/2026-BPN-paper-data/gene-function-prediction/
+output_dir: /BioPathNet/experiments/
 
 dataset:
   class: biomedical
-  path: /pasteur/appa/homes/claudy/BioPathNet/data/PC_KEGG_0602
-  include_factgraph: yes
-  
+  path: /BioPathNet/data/mock/
+  include_factgraph: no
+  files: ['train1.txt', 'train2.txt', 'valid.txt', 'test.txt']
+
 task:
   class: KnowledgeGraphCompletionBiomed
   model:
@@ -15,17 +16,18 @@ task:
     aggregate_func: pna
     short_cut: yes
     layer_norm: yes
-    remove_one_hop: yes
-    dependent: no
+    dependent: yes
+    symmetric: no
   criterion: bce
   num_negative: 32
   strict_negative: yes
-  adversarial_temperature: 1
+  adversarial_temperature: 0.5
   sample_weight: no
   heterogeneous_negative: yes
   heterogeneous_evaluation: yes
-  full_batch_eval: yes
-
+  # neg_samp_strategy: sans # [sans, degree, inv_degree]
+  # sans_rw_hops: "1000:2" # default 1000:2 # k=2 hop neighborhood approximated with 1000 random walks 
+  full_batch_eval: no
 
 optimizer:
   class: Adam
@@ -33,11 +35,9 @@ optimizer:
 
 engine:
   gpus: {{ gpus }}
-  batch_size: 32
+  batch_size: 4
   
-
 train:
-  num_epoch: 15
-  #batch_per_epoch: 500
+  num_epoch: 5
   
 metric: mrr
