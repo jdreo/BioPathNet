@@ -8,6 +8,8 @@ import torch
 from torchdrug import core
 from torchdrug.utils import comm
 
+from hlif_metrics.structures import conceptualGraph as cg 
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from biopathnet import dataset, layer, model, task, util
 
@@ -99,13 +101,32 @@ def visualize_path(solver, triplet, entity_vocab, relation_vocab):
         paths, weights = solver.model.visualize(sample)
         for path, weight in zip(paths, weights):
             triplets = []
+            cg_relations = []
+            cg_concepts = []
             for h, t, r in path:
+                cg_rel = {}
+                cg_c1 = {}
+                cg_c2 = {}
                 h_name = entity_vocab[h]
                 t_name = entity_vocab[t]
                 r_name = relation_vocab[r % num_relation]
+                cg_c1["ctype"] = ""
+                cg_c1["referent"] = "h_name"
+                cg_c2["ctype"] = ""
+                cg_c2["referent"] = "t_name"
                 if r >= num_relation:
                     r_name += "^(-1)"
+                    cg_rel["rtype"] = r_name
+                    cg_rel["args"] = [t_name, c_name]
+                else:
+                    cg_rel["rtype"] = r_name
+                    cg_rel["args"] = [h_name, t_name]
                 triplets.append("<%s, %s, %s>" % (h_name, r_name, t_name))
+                cg_concepts.append(cg_c1)
+                cg_concepts.append(cg_c2)
+                cg_relations.append(cg_rel)
+                cg_graph = cg.ConceptualGraph(cg_concepts, cg_relations)
+                
             logger.warning("weight: %g\n\t%s" % (weight, " ->\n\t".join(triplets)))
 
 
