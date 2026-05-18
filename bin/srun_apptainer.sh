@@ -41,6 +41,7 @@ fi
 echo "Config:" >&2
 cat ${input_conf}
 
+#            --bind $HOME \
 cmd="srun \
     -p gpu \
     -q gpu \
@@ -51,9 +52,8 @@ cmd="srun \
             --nv \
             --writable-tmpfs \
             --cleanenv \
-            --bind $HOME \
             --bind ${bpn_dir}:/BioPathNet \
-            biopathnet.sif -f ${bpn_cmd}  --gpus [0] -c ${input_conf} $@"
+            biopathnet.sif -f ${bpn_cmd}  --gpus [0] -c ${input_conf} --biopathnet /BioPathNet $@"
 
 echo "Submitting:" >&2
 echo $cmd >&2

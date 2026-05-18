@@ -15,13 +15,15 @@ module load apptainer cuda
 input_conf="$1"
 shift
 
-input_datadir="$1"
+# Need realpath for the underlying BPN run in a container that mounts the CWD.
+input_datadir="$(realpath $1)"
 shift
 
 work_dir="$(pwd)"
 expe_conf="config_$(date -Iseconds).yaml"
 
-bpn_dir="$(realpath $(dirname $input_conf)/../../)"
+conf_dir="$(realpath $(dirname $input_conf))"
+bpn_dir="${conf_dir%BioPathNet/*}BioPathNet/"
 if [ ! -f ${bpn_dir}/pyproject.toml ] ; then
     echo "ERROR: the directory inferred from the config file path does not contains BioPathNet: '$bpn_dir'"
     exit 3
@@ -32,7 +34,7 @@ if [ ! -f $bpn_dir/biopathnet.sif ] ; then
     exit 4
 fi
 # Link the container.
-ln -s $bpn_dir/biopathnet.sif
+ln -s -f $bpn_dir/biopathnet.sif
 
 # Instantiate the config file.
 cat $input_conf | sed "s,{{DATA_DIR}},${input_datadir},g" | sed "s,{{OUTPUT_DIR}},${work_dir},g" > ${expe_conf}

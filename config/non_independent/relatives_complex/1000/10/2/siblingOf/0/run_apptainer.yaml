@@ -1,8 +1,8 @@
-output_dir: /BioPathNet/experiments/single_SKG/relatives_complex/1000/10/2/siblingOf/0/
+output_dir: {{BIOPATHNET}}/experiments/non_independent/relatives_complex/1000/10/2/siblingOf/0/
 
 dataset:
   class: biomedical
-  path: /BioPathNet/data/single_SKG/relatives_complex/1000/10/2/siblingOf/0/
+  path: {{BIOPATHNET}}/data/non_independent/relatives_complex/1000/10/2/siblingOf/0/
   include_factgraph: yes
   files: ['brg.txt', 'graph_learning.txt', 'graph_validation.txt', 'graph_test.txt']
 
