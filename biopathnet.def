@@ -13,7 +13,7 @@ From: ubuntu:22.04  # Torch needs libc6-dev >= 2.29
     # Update the available packages list.
     apt -y update
     # And add the "universe" repository (allow to install many more software).
-    apt -y install software-properties-common time
+    apt -y install software-properties-common # time
     add-apt-repository universe
     apt -y update
     # Update the operating systems (install last versions with bugfixes).
