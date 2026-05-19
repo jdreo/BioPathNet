@@ -1,8 +1,8 @@
-output_dir: /BioPathNet/experiments/single_SKG/relatives_complex/1000/10/2/siblingOf/0/
+output_dir: /pasteur/helix/users/claudy/BioPathNet/experiments/single_SKG/relatives_complex/1000/10/2/siblingOf/0/
 
 dataset:
   class: biomedical
-  path: /BioPathNet/data/single_SKG/relatives_complex/1000/10/2/siblingOf/0/
+  path: /pasteur/helix/users/claudy/BioPathNet/data/single_SKG/relatives_complex/1000/10/2/siblingOf/0/
   include_factgraph: yes
   files: ['brg.txt', 'graph_learning.txt', 'graph_validation.txt', 'graph_test.txt']
 
@@ -28,6 +28,7 @@ task:
   # neg_samp_strategy: sans # [sans, degree, inv_degree]
   # sans_rw_hops: "1000:2" # default 1000:2 # k=2 hop neighborhood approximated with 1000 random walks 
   full_batch_eval: no
+  remove_pos: no
 
 optimizer:
   class: Adam
