@@ -1,8 +1,8 @@
-output_dir: {{BIOPATHNET}}/experiments/single_SKG/simplest/10000/100/10/childOf/0/
+output_dir: /pasteur/helix/users/claudy/BioPathNet/experiments/single_SKG/simplest/1000/10/2/childOf/0/
 
 dataset:
   class: biomedical
-  path: {{BIOPATHNET}}/data/single_SKG/simplest/10000/100/10/childOf/0/
+  path: /pasteur/helix/users/claudy/BioPathNet/data/single_SKG/simplest/1000/10/2/childOf/0/
   include_factgraph: yes
   files: ['brg.txt', 'graph_learning.txt', 'graph_validation.txt', 'graph_test.txt']
 
@@ -35,7 +35,7 @@ optimizer:
 
 engine:
   gpus: {{ gpus }}
-  batch_size: 32
+  batch_size: 16
   
 train:
   num_epoch: 5
