@@ -6,7 +6,7 @@ cat config/mock/mockdata_run.yaml | sed "s,/Users/claudy/work/projects/BioPathNe
 cmd="srun \
     -p gpu \
     -q gpu \
-    --gres=gpu:1 \
+    --gres=gmem=80G,gpu:1 \
     --mem=50G \
     apptainer \
         run \
