@@ -45,7 +45,7 @@ cat ${input_conf}
 cmd="srun \
     -p gpu \
     -q gpu \
-    --gres=gpu:1 \
+    --gres=gmem=80G,gpu:1 \
     --mem=50G \
     apptainer \
         run \
