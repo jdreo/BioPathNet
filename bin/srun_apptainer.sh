@@ -53,6 +53,7 @@ cmd="srun \
             --writable-tmpfs \
             --cleanenv \
             --bind ${bpn_dir}:/BioPathNet \
+            --bind $HOME \
             biopathnet.sif -f ${bpn_cmd}  --gpus [0] -c ${input_conf} --biopathnet /BioPathNet $@"
 
 echo "Submitting:" >&2
