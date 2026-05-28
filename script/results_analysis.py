@@ -10,19 +10,27 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("ranked_edges")
-    parser.add_argument("skg")
+    parser.add_argument("skg_learned")
+    parser.add_argument("skg_expected")
 
     asked = parser.parse_args()
 
-    skg = set()
-    with open(asked.skg) as fd:
+    skg_learned = set()
+    with open(asked.skg_learned) as fd:
         for line in fd:
             triple = tuple(line.strip().split("\t"))
-            skg.add(triple)
+            skg_learned.add(triple)
+
+    skg_expected = set()
+    with open(asked.skg_expected) as fd:
+        for line in fd:
+            triple = tuple(line.strip().split("\t"))
+            skg_expected.add(triple)
 
     ranks = pd.read_csv(asked.ranked_edges, sep="\t", usecols=["query_node", "query_relation", "pred_node", "prediction_score"])
     ranks["reverse"] = False
-    ranks["exists"] = False
+    ranks["in_learned"] = False
+    ranks["in_expected"] = False
     ranks["name"] = ranks["query_node"]+ranks["query_relation"]+ranks["pred_node"]
     ranks["predicted_edge"] = ""
     ranks["type"] = ""
@@ -33,18 +41,24 @@ if __name__ == "__main__":
     for i,row in ranks.iterrows():
         source,edge,target = (ranks.loc[i, "query_node"], ranks.loc[i, "query_relation"], ranks.loc[i, "pred_node"])
 
-        reverse_tag = "_"
+        reverse_tag = "r"
         if re.match("^rev_", edge):
             ranks.loc[i, "reverse"] = True
-            reverse_tag = "r"
+            reverse_tag = "R"
 
-        existing_tag = "OUT"
-        if (source,edge,target) in skg  \
-        or (target,edge.replace("rev_", ""),source) in skg:
-            ranks.loc[i, "exists"] = True
-            existing_tag = "IN"
+        in_learned_tag = "l"
+        if (source,edge,target) in skg_learned  \
+        or (target,edge.replace("rev_", ""),source) in skg_learned:
+            ranks.loc[i, "in_learned"] = True
+            in_learned_tag = "L"
 
-        ranks.loc[i, "type"] = existing_tag + reverse_tag
+        in_expected_tag = "e"
+        if (source,edge,target) in skg_expected  \
+        or (target,edge.replace("rev_", ""),source) in skg_expected:
+            ranks.loc[i, "in_expected"] = True
+            in_expected_tag = "E"
+
+        ranks.loc[i, "type"] = in_learned_tag + in_expected_tag + reverse_tag
         ranks.loc[i, "predicted_edge"] = ranks.loc[i, "name"] + "_" + ranks.loc[i, "type"]
 
     f, ax = plt.subplots(figsize=(6, 15))
