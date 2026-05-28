@@ -1,8 +1,8 @@
-output_dir: /BioPathNet/experiments/single_SKG/parent_has_role/1000/10/2/hasRole/0/
+output_dir: {{OUTPUT_DIR}}
 
 dataset:
   class: biomedical
-  path: /BioPathNet/data/single_SKG/parent_has_role/1000/10/2/hasRole/0/
+  path: {{DATA_DIR}}
   include_factgraph: yes
   files: ['brg.txt', 'graph_learning.txt', 'graph_validation.txt', 'graph_test.txt']
 
@@ -23,10 +23,10 @@ task:
   strict_negative: no
   adversarial_temperature: 0.5
   sample_weight: no
-  heterogeneous_negative: no
+  heterogeneous_negative: yes
   heterogeneous_evaluation: yes
   # neg_samp_strategy: sans # [sans, degree, inv_degree]
-  # sans_rw_hops: "1000:2" # default 1000:2 # k=2 hop neighborhood approximated with 1000 random walks 
+  # sans_rw_hops: "1000:2" # default 1000:2 # k=2 hop neighborhood approximated with 1000 random walks
   full_batch_eval: no
 
 optimizer:
@@ -36,8 +36,9 @@ optimizer:
 engine:
   gpus: {{ gpus }}
   batch_size: 32
-  
+
 train:
-  num_epoch: 5
-  
+  num_epoch: 15
+  # batch_per_epoch: 500
+
 metric: mrr
